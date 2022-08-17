@@ -23,7 +23,7 @@ class AuthenticateApis
             return response()->json(['error' => ['message' => 'no token parsed. Make sure you are authenticated.']], 401);
         }
 
-        $jwtService = new JwtService(env('JWT_PUBLIC_KEY'));
+        $jwtService = new JwtService();
 
         // check if the user has a valid token 
         if (!$jwtService->validateToken($request->bearerToken())) {
@@ -31,6 +31,7 @@ class AuthenticateApis
         }
 
         // check if token is expired 
+
         if ($jwtService->checkIfTokenIsExpired($request->bearerToken())) {
             return response()->json(['error' => ['message' => 'Token expired. Login to refresh token.']], 401);
             // return $next($request);

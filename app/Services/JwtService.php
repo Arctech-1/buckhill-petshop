@@ -18,16 +18,17 @@ class JwtService
 {
     private $privateKey;
     private $publicKey;
-    public string $uuid;           // needed to create the token
+    public $uuid;           // needed to create the token
     private $config;
     public $user;
-    // public $expiryTime;
+    public $expiryTime;
 
 
-    public function __construct($uuid)
+    public function __construct()
     {
         $this->privateKey = InMemory::base64Encoded(base64_encode(env('JWT_PRIVATE_KEY')));
-        $this->publicKey = InMemory::base64Encoded(base64_encode($uuid));
+        $this->publicKey = InMemory::base64Encoded(base64_encode(env('JWT_PUBLIC_KEY')));
+        // $this->uuid = $this->uuid;
         $this->config = Configuration::forAsymmetricSigner(new Sha256(), $this->privateKey, $this->publicKey);
     }
 
@@ -37,9 +38,9 @@ class JwtService
         $retrievedToken = $this->config->parser()->parse($token);
         $decodeUuid = base64_decode($retrievedToken->claims()->toString());
         $userUuid = json_decode($decodeUuid);
-
+        $this->uuid = $userUuid->uuid;
         // check if token exists in the database
-        $userToken = JwtTokens::with(['user'])->where(['unique_id' => $token, 'last_used_at' => null || ''])->first();
+        $userToken = JwtTokens::with(['user'])->where(['unique_id' => $token, 'last_used_at' => null])->first();
         if ($userToken) {
             $this->uuid = $userUuid->uuid;
             // $this->expiryTime = $userUuid->exp;
@@ -64,6 +65,23 @@ class JwtService
                 $this->user = $user;
                 return true;
             }
+            return false;
+        }
+
+        return false;
+    }
+
+    public function checkIfTokenIsUser($token): bool
+    {
+
+        if ($this->validateToken($token)) {
+            $user = User::where(['uuid' => $this->uuid, 'is_admin' => 0])->get();
+            if ($user) {
+                $this->user = $user;
+                return true;
+            } else {
+                return false;
+            }
         }
 
         return false;
@@ -71,18 +89,17 @@ class JwtService
 
     public function checkIfTokenIsExpired($token): bool
     {
-        if ($this->validateToken($token)) {
-            $token = JwtTokens::where(['unique_id' => $token, 'last_used_at' => null || ''])->first();
-            if ($token) {
-                $expiryDate = Carbon::createFromTimestamp($token->expires_at);
-                $currentDate = Carbon::now();
-                if ($expiryDate->diffInHours($currentDate, false) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+        // if ($this->validateToken($token)) {
+        $token = JwtTokens::where(['unique_id' => $token, 'last_used_at' => null])->first();
+        if ($token) {
+            $expiryDate = Carbon::parse($token->expires_at);
+            $currentDate = Carbon::now();
+            if ($expiryDate < $currentDate) {
+                return true;
             }
+            return false;
         }
+        // }
         return false;
     }
 
@@ -92,32 +109,51 @@ class JwtService
         if ($this->checkIfTokenIsExpired($token)) {
             // update refreshed at date
             $date = Carbon::now();
-            $token = JwtTokens::where(['unique_id' => $token, 'last_used_at' => null || ''])->update(['expires_at' => $date->addHour(), 'refreshed_at' => $date]);
+            $token = JwtTokens::where(['unique_id' => $token, 'last_used_at' => null])->update(['expires_at' => $date->addHour(), 'refreshed_at' => $date]);
         }
     }
 
-    public function createToken(): string
+    public function createToken($uuid): string
     {
         $now = new DateTimeImmutable();
         $token = $this->config->builder()
             ->issuedBy(env('APP_URL'))
             ->withHeader('alg', 'ES256')
             ->withHeader('typ', 'JWT')
-            ->withClaim('uuid', $this->uuid)
+            ->withClaim('uuid', $uuid)
             ->issuedAt($now)
             ->expiresAt($now->modify('+1 hour'))
             ->getToken($this->config->signer(), $this->config->signingKey());
 
+        $this->expiryTime = $now->modify('+1 hour');
+
         return $token->toString();
     }
 
-    public function unsetToken($token): string
+    public function resetPasswordToken($uuid): string
+    {
+        $now = new DateTimeImmutable();
+        $token = $this->config->builder()
+            ->issuedBy(env('APP_URL'))
+            ->withHeader('alg', 'ES256')
+            ->withHeader('typ', 'JWT')
+            ->withClaim('uuid', $uuid)
+            ->issuedAt($now)
+            ->expiresAt($now->modify('+1 hour'))
+            ->getToken($this->config->signer(), $this->config->signingKey());
+
+        $this->expiryTime = $now->modify('+1 hour');
+
+        return $token->toString();
+    }
+
+    static public function unsetToken($token): bool
     {
         if ($token != '') {
             $date = Carbon::now();
-            $token = JwtTokens::where(['unique_id' => $token, 'last_used_at' => null || ''])->update(['last_used_at' => $date]);
-            return 'Token is unset';
+            $token = JwtTokens::where(['unique_id' => $token, 'last_used_at' => null])->update(['last_used_at' => $date]);
+            return true;
         }
-        return 'No token passed';
+        return false;
     }
 }

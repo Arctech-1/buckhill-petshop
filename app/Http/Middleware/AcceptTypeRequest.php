@@ -2,11 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\JwtService;
 use Closure;
 use Illuminate\Http\Request;
 
-class CheckUserRole
+class AcceptTypeRequest
 {
     /**
      * Handle an incoming request.
@@ -17,10 +16,8 @@ class CheckUserRole
      */
     public function handle(Request $request, Closure $next)
     {
-
-        $jwtService = new JwtService(env('JWT_PUBLIC_KEY'));
-        if (!$jwtService->checkIfTokenIsAdmin($request->bearerToken())) {
-            return response()->json(['error' => ['message' => "Forbidden. Unauthorized access."]], 403);
+        if (!$request->expectsJson()) {
+            return response()->json('Set header to accept type application/json or text/html');
         }
         return $next($request);
     }
