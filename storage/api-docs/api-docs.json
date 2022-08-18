@@ -1,0 +1,664 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Petshop OpenApi Demo Documentation",
+        "description": "Pet Shop Swagger OpenApi description",
+        "contact": {
+            "email": "reuben@outlook.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://buckhill-petshop.test/api/v1",
+            "description": "Pet Shop Demo API Server"
+        }
+    ],
+    "paths": {
+        "/admin/create": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Store new user",
+                "description": "Returns success message",
+                "operationId": "storeUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreAdminUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/admin/user-edit/{uuid}": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update existing user",
+                "description": "Returns updated user data",
+                "operationId": "updateUser",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "User uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateAdminUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/admin/user-delete/{uuid}": {
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete existing user",
+                "description": "Deletes a record and returns a message",
+                "operationId": "deleteUser",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "User uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {},
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/admin/login": {
+            "post": {
+                "summary": "Authenticate user credential and get bearer token and also to refresh token if expired",
+                "description": "Returns success message with bearer token",
+                "operationId": "loginAdminUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/admin/logout": {
+            "post": {
+                "summary": "Logout user.",
+                "description": "Unsets the bearer token a record and returns a message",
+                "operationId": "logoutAdminUser",
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/order": {
+            "get": {
+                "summary": "View users orders",
+                "description": "Returns success message with list of a user order",
+                "operationId": "userViewOrders",
+                "requestBody": {},
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/order/{uuid}/download": {
+            "get": {
+                "summary": "Download user invoice",
+                "description": "Downloads pdf",
+                "operationId": "userDownloadInvoice",
+                "requestBody": {},
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "summary": "Get user information",
+                "description": "Returns users data. always pass the bearer token",
+                "operationId": "getUser",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "summary": "Authenticate user credential and get bearer token and also to refresh token if expired",
+                "description": "Returns success message with bearer token",
+                "operationId": "loginUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/user/logout": {
+            "post": {
+                "summary": "Logout user.",
+                "description": "Unsets the bearer token a record and returns a message",
+                "operationId": "logoutUser",
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/user/forgot-password": {
+            "post": {
+                "summary": "Authenticate user credential and get bearer token and also to refresh token if expired",
+                "description": "Returns success message with bearer token",
+                "operationId": "forgotUserPassword",
+                "requestBody": {
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/user/reset-password-token": {
+            "post": {
+                "summary": "Authenticate user credential and get bearer token and also to refresh token if expired",
+                "description": "Returns success message with bearer token",
+                "operationId": "resetUserPassword",
+                "requestBody": {
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "first_name": {
+                        "title": "First Name",
+                        "description": "First name of the user",
+                        "type": "string",
+                        "example": "Reuben"
+                    },
+                    "last_name": {
+                        "title": "Last Name",
+                        "description": "Last name of the user",
+                        "type": "string",
+                        "example": "Arinze"
+                    },
+                    "email": {
+                        "title": "Email",
+                        "description": "User's email",
+                        "type": "string",
+                        "example": "arinzereuben@outlook.com"
+                    },
+                    "email_verified_at": {
+                        "title": "Created at",
+                        "description": "Created at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "password": {
+                        "title": "Password",
+                        "description": "Enter password",
+                        "type": "string",
+                        "example": "paSswordD"
+                    },
+                    "avatar": {
+                        "title": "Avatar",
+                        "description": "Enter image uuid ",
+                        "type": "string",
+                        "example": "paSswordD"
+                    },
+                    "address": {
+                        "title": "Address",
+                        "description": "Enter user's address ",
+                        "type": "string",
+                        "example": "63 lekki phase 1 Lagos"
+                    },
+                    "phone_number": {
+                        "title": "Phone number",
+                        "description": "Enter phone number ",
+                        "type": "string",
+                        "example": "080474758947342"
+                    },
+                    "is_marketing": {
+                        "title": "Marketing",
+                        "description": "Enter 0 or 1 ",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "Created at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "Updated at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "deleted_at": {
+                        "title": "Deleted at",
+                        "description": "Deleted at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "last_login_at": {
+                        "title": "Last Login at",
+                        "description": "Logged in at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "User"
+                }
+            },
+            "StoreAdminUserRequest": {
+                "title": "Store User request",
+                "description": "Store User request body data",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "first_name": {
+                        "title": "First Name",
+                        "description": "First name of the user",
+                        "type": "string",
+                        "example": "Reuben"
+                    },
+                    "last_name": {
+                        "title": "Last Name",
+                        "description": "Last name of the user",
+                        "type": "string",
+                        "example": "Arinze"
+                    },
+                    "email": {
+                        "title": "Email",
+                        "description": "User's email",
+                        "type": "string",
+                        "example": "arinzereuben@outlook.com"
+                    },
+                    "password": {
+                        "title": "Password",
+                        "description": "Enter password",
+                        "type": "string",
+                        "example": "paSswordD"
+                    },
+                    "avatar": {
+                        "title": "Avatar",
+                        "description": "Enter image uuid ",
+                        "type": "string",
+                        "example": "paSswordD"
+                    },
+                    "address": {
+                        "title": "Address",
+                        "description": "Enter user's address ",
+                        "type": "string",
+                        "example": "63 lekki phase 1 Lagos"
+                    },
+                    "phone_number": {
+                        "title": "Phone number",
+                        "description": "Enter phone number ",
+                        "type": "string",
+                        "example": "080474758947342"
+                    },
+                    "is_marketing": {
+                        "title": "Marketing",
+                        "description": "Enter 0 or 1 ",
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateAdminUserRequest": {
+                "title": "Update User request",
+                "description": "Update User request body data",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "first_name": {
+                        "title": "First Name",
+                        "description": "First name of the user",
+                        "type": "string",
+                        "example": "Reuben"
+                    },
+                    "last_name": {
+                        "title": "Last Name",
+                        "description": "Last name of the user",
+                        "type": "string",
+                        "example": "Arinze"
+                    },
+                    "email": {
+                        "title": "Email",
+                        "description": "User's email",
+                        "type": "string",
+                        "example": "arinzereuben@outlook.com"
+                    },
+                    "avatar": {
+                        "title": "Avatar",
+                        "description": "Enter image uuid ",
+                        "type": "string",
+                        "example": "paSswordD"
+                    },
+                    "address": {
+                        "title": "Address",
+                        "description": "Enter user's address ",
+                        "type": "string",
+                        "example": "63 lekki phase 1 Lagos"
+                    },
+                    "phone_number": {
+                        "title": "Phone number",
+                        "description": "Enter phone number ",
+                        "type": "string",
+                        "example": "080474758947342"
+                    },
+                    "is_marketing": {
+                        "title": "Marketing",
+                        "description": "Enter 0 or 1 ",
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Pet Shop",
+            "description": "Always pass the bearer token as header after login to make request to the endpoints"
+        }
+    ]
+}

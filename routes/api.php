@@ -57,7 +57,7 @@ Route::middleware('acceptJson.api')->group(function () {
             Route::middleware('roleAdmin.api')->group(function () {
                 Route::prefix('admin')->group(function () {
                     Route::post('/create', [AdminController::class, 'store']);
-                    Route::post('/user-edit/{uuid}', [AdminController::class, 'update']);
+                    Route::put('/user-edit/{uuid}', [AdminController::class, 'update']);
                     Route::delete('/user-delete/{uuid}', [AdminController::class, 'destroy']);
                     Route::post('/logout', [AdminController::class, 'logout']);
                 });

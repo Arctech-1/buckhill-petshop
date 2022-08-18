@@ -25,13 +25,56 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+
+    /**
+     * @OA\Get(
+     *      path="/order",
+     *      operationId="userViewOrders",
+     *      summary="View users orders",
+     *      description="Returns success message with list of a user order",
+     *      @OA\RequestBody(
+     *          @OA\Schema(
+     *                 @OA\Property(
+     *                     property="sortBy",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="limit",
+     *                     type="string"                 
+     *                 ), 
+     *                 @OA\Property(
+     *                     property="desc",
+     *                     type="boolean"
+     *                 ), 
+     *           ),
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
+
     public function userOrders(Request $request)
     {
 
-        // requet paramfa
-        $orderBy = $request->query('sortBy') ??
-            $limit =  $request->query('Limit') ?? 3;
-        $descOrAsc = $request->query('Limit') ? 'desc' : 'asc';
+        // request parameters
+        $orderBy = $request->query('sortBy') ?? 'id';
+        $limit =  $request->query('limit') ?? 3;
+        $descOrAsc = $request->query('desc') ? 'desc' : 'asc';
 
         $jwt = new JwtService;
         $uuid = $jwt->getUserTokenUuid($request->bearerToken());
@@ -49,6 +92,41 @@ class OrderController extends Controller
      * download user order invoice
      *
      * @return \Illuminate\Http\Response
+     */
+
+    /**
+     * @OA\Get(
+     *      path="/order/{uuid}/download",
+     *      operationId="userDownloadInvoice",
+     *      summary="Download user invoice",
+     *      description="Downloads pdf",
+     *      @OA\RequestBody(
+     *          @OA\Schema(
+     *                 @OA\Property(
+     *                     property="uuid",
+     *                     type="string",
+     *                      required=true
+     *                 ), 
+     *           ),
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
      */
 
     public function downloadOrderInvoice(Request $request, $uuid)
