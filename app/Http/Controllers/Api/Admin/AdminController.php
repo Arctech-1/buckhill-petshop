@@ -159,7 +159,7 @@ class AdminController extends Controller
         $validated = $request->validated();
 
         $password = Hash::make($validated['password']);
-        $user = User::where('uuid', $uuid)->first();
+        $user = User::where(['uuid' => $uuid, 'is_admin' => 0])->first();
         if (!$user) {
             return response()->json(['error' => ['message' => 'user not found']], 404);
         }
@@ -227,7 +227,7 @@ class AdminController extends Controller
 
 
 
-        $user = User::where('uuid', $uuid)->delete();
+        $user = User::where(['uuid' => $uuid, 'is_admin' => 0])->delete();
         if (!$user) {
             return response()->json(['error' => ['message' => 'user not found']], 404);
         }
