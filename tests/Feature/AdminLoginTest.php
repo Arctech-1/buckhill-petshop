@@ -15,12 +15,12 @@ class AdminLoginTest extends TestCase
      */
     public function test_admin_login()
     {
-        /*  $credentials = ['email' => 'admin@buckhill.co.uk', 'password' => 'admin'];
+        $credentials = ['email' => 'admin@buckhill.co.uk', 'password' => 'admin'];
 
         $response = $this->postJson('/api/v1/user/login', $credentials);
 
         $response->assertStatus(200);
-        $response->dump(); */
+        $response->dump();
         $this->assertTrue(true);
     }
 }

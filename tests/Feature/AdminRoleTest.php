@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\JwtTokens;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -13,13 +15,13 @@ class AdminRoleTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function test_if_user_can_access_user_route()
     {
-        $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYnVja2hpbGwtcGV0c2hvcC50ZXN0IiwidXVpZCI6IjE5YzM2MWE0LTZlYWEtNGQ3NC05ODkxLTZjYjgyZjBjNDQ3OCIsImlhdCI6MTY2MDg0ODgzMC4yNzg3MzIsImV4cCI6MTY2MDg1MjQzMC4yNzg3MzJ9.DuYxGkbsNeaV2bCwSpLzPE6kS7NVliZ_j7bEoPjyBLc';
+        $adminToken = JwtTokens::where(['user_id' => 1, 'last_used_at' => null])->first();
 
         $response = $this->withHeaders([
             'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $token
+            'Authorization' => 'Bearer ' . $adminToken->unique_id
         ])->get('/api/v1/user/check');
 
         $response->assertForbidden();

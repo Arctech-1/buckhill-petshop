@@ -17,14 +17,14 @@ class UserLoginTest extends TestCase
     public function test_if_user_can_login()
     {
         //create user
-        /*  $user = User::factory()->create();
+        $user = User::factory()->create();
 
         $credentials = ['email' => $user->email, 'password' => 'userpassword'];
 
         $response = $this->postJson('/api/v1/user/login', $credentials);
 
         $response->assertStatus(200);
-        $response->dump(); */
+        $response->dump();
         $this->assertTrue(true);
     }
 }
