@@ -75,7 +75,7 @@ class JwtService
     {
 
         if ($this->validateToken($token)) {
-            $user = User::where(['uuid' => $this->uuid, 'is_admin' => 0])->get();
+            $user = User::where(['uuid' => $this->uuid, 'is_admin' => 0])->first();
             if ($user) {
                 $this->user = $user;
                 return true;

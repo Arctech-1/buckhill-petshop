@@ -44,7 +44,7 @@ class AuthService
                     'expires_at' => $jwtService->expiryTime,
                 ]);
 
-                return response()->json(['message' => 'Login successful', 'bearerToken' => $token], 201);
+                return response()->json(['message' => 'Login successful', 'bearerToken' => $token], 200);
             } else {
                 array_push($error, 'Password does not match.');
             }
@@ -55,7 +55,7 @@ class AuthService
 
 
         // return the bearer token
-        return response()->json(['error' => $error], 200);
+        return response()->json(['error' => $error], 400);
     }
 
     static public function resolveUserLogout($token)

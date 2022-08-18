@@ -56,6 +56,9 @@ Route::middleware('acceptJson.api')->group(function () {
             /* Admin Routes */
             Route::middleware('roleAdmin.api')->group(function () {
                 Route::prefix('admin')->group(function () {
+                    Route::get('/user', function () {
+                        return 'test url go through';
+                    });
                     Route::post('/create', [AdminController::class, 'store']);
                     Route::put('/user-edit/{uuid}', [AdminController::class, 'update']);
                     Route::delete('/user-delete/{uuid}', [AdminController::class, 'destroy']);
@@ -67,6 +70,9 @@ Route::middleware('acceptJson.api')->group(function () {
             Route::get('/user', [UserController::class, 'index']);
             Route::middleware('roleUser.api')->group(function () {
                 Route::prefix('user')->group(function () {
+                    Route::get('/check', function () {
+                        return 'test url go through';
+                    });
                     Route::post('/logout', [UserController::class, 'logout']);
                 });
             });
