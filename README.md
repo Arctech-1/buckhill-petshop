@@ -49,6 +49,13 @@ Start your application
 php artisan serve
 ```
 
+## Generating Swagger API Documentation
+Run this command.
+```bash
+php artisan l5-swagger:generate 
+```
+
+
 ## Running Test
 
 Before running test, I recommend running your seeders for accurate test result.
