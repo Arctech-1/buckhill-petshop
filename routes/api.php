@@ -36,8 +36,8 @@ Route::middleware('acceptJson.api')->group(function () {
 
     Route::post('/v1/user/forgot-password', [UserController::class, 'forgotPassword']);
     Route::post('/v1/user/reset-password-token', [UserController::class, 'resetPassword']);
-    Route::get('/v1/orders', [OrderController::class,  'userOrders']);
-    Route::get('/v1/orders/{uuid}/download', [OrderController::class,  'downloadOrder']);
+    Route::get('/v1/order', [OrderController::class,  'userOrders']);
+    Route::get('/v1/order/{uuid}/download', [OrderController::class,  'downloadOrderInvoice']);
 
 
     /*

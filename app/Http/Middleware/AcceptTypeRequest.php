@@ -16,9 +16,9 @@ class AcceptTypeRequest
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->expectsJson()) {
-            return response()->json('Set header to accept type application/json or text/html');
-        }
+        // if (!$request->expectsJson()) {
+        //     return response()->json('Set header to accept type application/json or text/html');
+        // }
         return $next($request);
     }
 }
