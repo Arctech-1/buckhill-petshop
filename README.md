@@ -16,7 +16,7 @@ Order invoice download
 Run composer install
 
 ```bash
-composer install foobar
+composer install 
 ```
 
 Copy the .env.example. Create a .env file and paste.
