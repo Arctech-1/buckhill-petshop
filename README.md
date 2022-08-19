@@ -49,6 +49,13 @@ Start your application
 php artisan serve
 ```
 
+## Login Credentials
+Admin Email:  admin@buckhill.co.uk
+Admin Password: admin
+
+For all seeded user's, the password is: userpassword
+
+
 ## Generating Swagger API Documentation
 Run this command.
 ```bash
